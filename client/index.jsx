@@ -3,25 +3,15 @@ import {render} from 'react-dom';
 import {Router} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes from 'routes';
-import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import * as reducers from '../shared/reducers';
 import { fromJS } from 'immutable';
+import configureStore from '../shared/store/configureStore';
 
 const history = createBrowserHistory();
-let initialState = window.__INITIAL_STATE__;
 console.log('Initial state:', initialState);
 
-// Transform into Immutable.js collections,
-// but leave top level keys untouched for Redux
-Object
-  .keys(initialState)
-  .forEach(key => {
-    initialState[key] = fromJS(initialState[key]);
-   });
-
 const reducer = combineReducers(reducers);
-const store   = createStore(reducer, initialState);
+const store   = configureStore(window.__INITIAL_STATE__);
 
 render(
   <Provider store={store}>

@@ -1,23 +1,46 @@
 import React from 'react';
-import TodosView from '../components/TodosView';
-import TodosForm from 'components/TodosForm';
-import { bindActionCreators } from 'redux';
-import * as TodoActions from '../actions/TodoActions';
+import TodosView from './TodosView';
+import TodosForm from './TodosForm';
+import * as todoActions from '../actions/todo-actions';
 import {connect} from 'react-redux';
 
 
-@connect(state => ({ todos: state.todos }))
-export default class Home extends React.Component {
+
+class Home extends React.Component {
+
+  static needs = [
+    todoActions.fetchTodos
+  ]
+
   render() {
-    const { todos, dispatch } = this.props;
+    const { todos, editTodo, deleteTodo, createTodo, getTodos} = this.props;
 
     return (
       <div id="todo-list">
-        <TodosView todos={todos}
-          {...bindActionCreators(TodoActions, dispatch)} />
+        <TodosView
+          todos={todos}
+          editTodo={editTodo}
+          deleteTodo={deleteTodo}
+          getTodos={getTodos} />
         <TodosForm
-          {...bindActionCreators(TodoActions, dispatch)} />
+          createTodo={createTodo} />
       </div>
     );
   }
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state.todos
+  };
+}
+
+const mapActionsToProps = {
+  createTodo: todoActions.createTodo,
+  editTodo: todoActions.editTodo,
+  deleteTodo: todoActions.deleteTodo,
+  getTodos: todoActions.getTodos
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Home)
