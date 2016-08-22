@@ -8,10 +8,9 @@ import { fromJS } from 'immutable';
 import configureStore from '../shared/store/configureStore';
 
 const history = createBrowserHistory();
-console.log('Initial state:', initialState);
-
-const reducer = combineReducers(reducers);
 const store   = configureStore(window.__INITIAL_STATE__);
+console.log(store.getState());
+
 
 render(
   <Provider store={store}>

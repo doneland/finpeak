@@ -10,6 +10,7 @@ export default function todoReducer(state = [], action) {
     case 'DELETE_TODO':
       return state.delete(action.id);
     case 'GET_TODOS':
+      console.log('GET_TODOS -> current state:', state, 'action.payload:', action.payload);
       return state.concat(action.payload);
     default:
       return state;

@@ -10,11 +10,6 @@ export default class TodosView extends React.Component {
   }
 
 
-  componentDidMount() {
-    this.props.getTodos();
-  }
-
-
   handleDelete(e) {
     const id = Number(e.target.dataset.id);
     this.props.deleteTodo(id);
@@ -30,6 +25,7 @@ export default class TodosView extends React.Component {
 
 
   render() {
+    console.log('Number of todos in TodosView: ', this.props.todos.length);
     return (
       <div id="todo-list">
         {
