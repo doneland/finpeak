@@ -9,7 +9,6 @@ import configureStore from '../shared/store/configureStore';
 
 const history = createBrowserHistory();
 const store   = configureStore(window.__INITIAL_STATE__);
-console.log(store.getState());
 
 
 render(

@@ -21,17 +21,28 @@ export default class TransactionForm extends React.Component {
   }
 
 
+  componentWillReceiveProps(nextProps) {
+    if (!!nextProps.transaction) {
+      this.setState({form: nextProps.transaction});
+    }
+  }
+
+
   resetForm() {
-    this.setState({form: emptyForm});
+    this.setState({form: this.emptyForm});
   }
 
 
   handleSubmit(e) {
     e.preventDefault();
-    const {onSubmit} = this.props;
+    const {onCreate, onEdit} = this.props;
     const {form} = this.state;
 
-    onSubmit(form);
+    if (!form._id) {
+      onCreate(form);
+    } else {
+      onEdit(form);
+    }
 
     return this.resetForm();
   }

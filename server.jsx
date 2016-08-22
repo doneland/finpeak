@@ -11,6 +11,8 @@ import todosRoutes from './server/routes/todos';
 import transactionRoutes from './server/routes/transaction.routes';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import favicon from 'serve-favicon';
+import path from 'path';
 
 
 // Initialize the Express App.
@@ -34,16 +36,18 @@ mongoose.connect(MONGODB_URL, (err) => {
 // Apply body Parser and server public assets and routes.
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
+app.use('/static', express.static('public/static'));
+app.use(favicon(path.join(__dirname, 'public', 'static', 'favicon.ico')));
+
+// Routes
 app.use('/api', todosRoutes);
 app.use('/api', transactionRoutes);
 
 app.use((req, res) => {
   const location = createLocation(req.url);
   const store = configureStore();
-  console.log('State before match:', store.getState());
 
   match({ routes, location }, (err, redirectLocation, renderProps) => {
-    console.log('renderProps:', renderProps.components);
     if (err) {
       console.error(err);
       return res.status(500).end('Internal server error');
@@ -52,7 +56,6 @@ app.use((req, res) => {
     if (!renderProps) return res.status(404).end('Not found.');
 
     function renderView() {
-      console.log('Render view.');
       const InitialComponent = (
         <Provider store={store}>
           <RoutingContext {...renderProps} />
@@ -60,7 +63,6 @@ app.use((req, res) => {
       );
 
       const initialState = store.getState();
-      console.log('match->initialState:', store.getState());
       const componentHTML = renderToString(InitialComponent);
 
       const HTML = `
